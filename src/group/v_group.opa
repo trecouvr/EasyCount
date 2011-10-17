@@ -19,7 +19,13 @@ Group_View_Group = {{
     @param ref the reference of current group
     */
     show_pot_commun(ref : Group.ref) : void =
-        Dom.transform([#pot_commun <- <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun(ref), <></>)}</ul>])
+        pot_commun = pot_commun(ref)
+        xhtml_pot_commun =
+            if Map.size(pot_commun) < 2 then
+                <div>Advice : You are alone in this group, you should invite somebody.</div>
+            else
+                <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun, <></>)}</ul>
+        Dom.transform([#pot_commun <- xhtml_pot_commun])
     
     /**
     Compute common jar.
@@ -38,12 +44,18 @@ Group_View_Group = {{
                     facture.concerned,
                     add_payed(facture.emeteur, facture.montant, pot)
             )
+        /**
+        Map with all users in the group.
+        */
+        basic_map(group : Group.t) : map(User.ref,float) = 
+            Map.From.assoc_list(List.map(v -> (v,0.0), group.users))
+        
         Option.switch(
             group ->
                 List.fold(
                     facture,pot -> add_facture(facture, pot),
                     group.factures,
-                    Map.empty
+                    basic_map(group)
                 )
             ,
             Map.empty,
