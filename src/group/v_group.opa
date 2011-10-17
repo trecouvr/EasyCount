@@ -80,8 +80,10 @@ Group_View_Group = {{
         end
         Dom.transform([#notice_add <- notice])
     
-    add_facture(table : TableBuilder.t(Facture.t))(facture : Facture.t) : void =
-        TableBuilder.add(table.channel, facture)
+    add_facture(ref : Group.ref, table : TableBuilder.t(Facture.t))(facture : Facture.t) : void =
+        do TableBuilder.add(table.channel, facture)
+        do show_pot_commun(ref)
+        void
     
     
     html(ref : Group.ref) : xhtml =
@@ -90,9 +92,10 @@ Group_View_Group = {{
             (<>
             <h1>Groupe {ref}</h1>
             <div><a href="/user/compte">My account</a></div>
+            <h3>Common jar</h3>
             <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
             <h3>Add an expediture</h3>
-            {NewFactureForm.show(ref, add_facture(table))}
+            {NewFactureForm.show(ref, add_facture(ref, table))}
             <h3>Add somebody in the group</h3>
             <div id=#notice_add></div>
             <input id=#new_user/>

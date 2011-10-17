@@ -87,10 +87,10 @@ NewFactureForm = {{
         fields = <>
             {create_field(montant)}
             {create_field(repartition)}
-            <input type="submit" value="Ajouter" />
+            <input type="submit" value="Add" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("ajouter", {Basic}, fields, process(ref,edit))
+        xhtml_form = WFormBuilder.form_html("add", {Basic}, fields, process(ref,edit))
         
         <>
         <div id=#notice></div>
