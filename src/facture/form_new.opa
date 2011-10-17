@@ -12,7 +12,13 @@ NewFactureForm = {{
     create_field(field) =
         WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
     
-    parse_repartition(s : string) =
+    /**
+    Parse the formatted string to get distribution of the expediture.
+    Get users concerned and their parts.
+    @param s the formatted-string
+    @return an option, if succeed a list of {nom nb_parts}
+    */
+    parse_repartition(s : string) : option(list({ nb_parts: float; nom: string })) =
     (
         name_parser =
             parser
@@ -41,10 +47,20 @@ NewFactureForm = {{
         r
     )
     
-    do_repartition(montant : float, repartition) : map(User.ref, float) =
+    /**
+    Transform parts into value of maney.
+    @param montant the total amount
+    @param repartition the distribution of parts computed by parse_repartition(..)
+    */
+    do_repartition(montant : float, repartition : list({ nb_parts: float; nom: string })) : map(User.ref, float) =
         tot_parts = List.fold(v,acc -> acc+v.nb_parts, repartition, 0.0)
         Map.From.assoc_list(List.map(v -> (v.nom, montant * v.nb_parts / tot_parts), repartition))
     
+    /**
+    Compute the process fonction of the form.
+    @param ref the reference of the current group
+    @param edit a function to call if success to update a table
+    */
     process(ref : Group.ref, edit : (Facture.t -> void))(_) : void =
     (
         montant = match WFormBuilder.get_field_value(montant) with
@@ -80,8 +96,13 @@ NewFactureForm = {{
         do Dom.transform([#notice <- <>{notice}</>])
         void
     )
-        
-
+    
+    /**
+    Get form.
+    @param ref the reference of current group
+    @param edit a function to update a table of expeditures
+    @return xhtml
+    */
     show(ref : Group.ref, edit : (Facture.t -> void)) : xhtml =
     (
         fields = <>
