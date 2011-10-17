@@ -24,9 +24,16 @@ Group_View_Group = {{
             if Map.size(pot_commun) < 2 then
                 <div>Advice : You are alone in this group, you should invite somebody.</div>
             else
+                random_color() =
+                    s = Int.to_hex(Random.int(255))^Int.to_hex(Random.int(255))^Int.to_hex(Random.int(255))
+                    Int.repeat(s -> s^"0", s, 6-String.length(s))
                 names = Map.To.key_list(pot_commun)
                 datas = Map.To.val_list(pot_commun)
-                colors = []
+                colors = Int.repeat(
+                    accu -> List.append([random_color()],accu),
+                    [],
+                    Map.size(pot_commun)
+                )
                 chart = Chart.xhtml({Chart.default with ~datas ~colors ~names})
                 <>
                 {chart}
