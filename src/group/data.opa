@@ -17,6 +17,9 @@ Group_Data = {{
     get_users(ref : Group.ref) =
         /groups[ref]/users
     
+    can_view(ref : Group.ref, ref_user : User.ref) : bool =
+        List.exists(_ == ref_user, /groups[ref]/users)
+    
     add(name : string) : outcome(string,string) =
         if Db.exists(@/groups[name]) then
             {failure = "Name already used"}
@@ -46,4 +49,7 @@ Group_Data = {{
             {failure = "This user isn't in the database, he should register before"},
             User_Data.get(new_user)
         )
+    
+    
+    
 }}

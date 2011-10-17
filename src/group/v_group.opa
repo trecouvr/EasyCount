@@ -89,7 +89,10 @@ Group_View_Group = {{
         {xhtml_factures_list(ref)}
         </>)
         
-        <div id=#content onready={_->Dom.transform([#content <- xhtml()])}>Groupe {ref}</div>
+        if Group_Data.can_view(ref, User.current_user_ref()) then
+            <div id=#content onready={_->Dom.transform([#content <- xhtml()])}>Groupe {ref}</div>
+        else
+            <div>You can't access to this group</div>
 
 
         
