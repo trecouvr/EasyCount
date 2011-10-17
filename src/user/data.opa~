@@ -1,0 +1,8 @@
+
+
+
+
+
+User.Data = {{
+    add(name : string, password : string, email : string) : void =
+        /user <- {~name ~password ~email}

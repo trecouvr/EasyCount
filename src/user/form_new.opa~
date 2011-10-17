@@ -1,0 +1,28 @@
+
+
+import stdlib.widgets.formbuilder
+
+TestRegisterForm = {{
+    username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
+    passwd1    = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
+    passwd2    = WFormBuilder.mk_field("Password again:", WFormBuilder.passwd_field)
+    email_addr = WFormBuilder.mk_field("Email address:", WFormBuilder.email_field(<>Wrong email</>))
+
+    create_field(field) =
+        WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
+
+    process(_) =
+        user = WFormBuilder.get_field_value(username)
+        Log.notice("form", "{user} {username.data.id}")
+
+    show() =
+        fields = <>
+            {create_field(username)}
+            {create_field(passwd1)}
+            {create_field(passwd2)}
+            {create_field(email_addr)}
+            <input type="submit" value="Register" />
+        </>
+
+        WFormBuilder.form_html("register", {Basic}, fields, process)
+}}

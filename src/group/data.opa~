@@ -1,0 +1,14 @@
+
+
+
+
+
+
+
+
+
+Group_Data = {{
+    
+    
+    get(ref : Group.ref) : option(Group.t) =
+        ?/groups[ref]
