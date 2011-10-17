@@ -16,7 +16,7 @@ User_View_Account = {{
         )
     
     @client
-    table_groups_list() : TableBuilder.t(string) =
+    table_groups() : TableBuilder.t(string) =
         columns = [
             TableBuilder.mk_column(
                 <>Groupe</>,
@@ -33,7 +33,7 @@ User_View_Account = {{
     
     html() : xhtml =
         xhtml() = 
-            table = table_groups_list()
+            table = table_groups()
             (<>
             <h1>My Account</h1>
             <p>Welcome {User.current_user_ref()}.</p>

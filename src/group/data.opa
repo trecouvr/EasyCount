@@ -31,14 +31,14 @@ Group_Data = {{
             do /users[user_ref]/groups <- List.add(name,groups)
             {success = new_group}
     
-    add_facture(ref : Group.ref, facture : Facture.t) : outcome(string,string) =
+    add_facture(ref : Group.ref, facture : Facture.t) : outcome(Facture.t,string) =
         users_ingroup = /groups[ref]/users
         if List.exists(nom -> not(List.exists(_ == nom, users_ingroup)), Map.To.key_list(facture.concerned)) then
             {failure = "a user isn't in the group or has been missplelled"}
         else
             l = /groups[ref]/factures
             do /groups[ref]/factures <- List.add(facture, l)
-            {success = "expediture added"}
+            {success = facture}
     
     add_user(ref : Group.ref, new_user : User.ref) : outcome(string,string) =
         Option.switch(

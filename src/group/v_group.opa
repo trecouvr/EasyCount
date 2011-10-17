@@ -14,18 +14,25 @@ Group_View_Group = {{
             Group_Data.get(ref)
         )
     
+    show_pot_commun(ref : Group.ref) : void =
+        Dom.transform([#pot_commun <- <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun(ref), <></>)}</ul>])
+    
     pot_commun(ref : Group.ref) =
+        add_to_pay(nom, montant : float, pot) =
+            Map.replace_or_add(nom, (last_montant -> Option.switch(v -> v - montant, 0.0-montant, last_montant)), pot)
+        add_payed(nom, montant : float, pot) = 
+            Map.replace_or_add(nom, (last_montant -> Option.switch(v -> v + montant, montant, last_montant)), pot)
+        add_facture(facture, pot) = 
+            Map.fold(
+                nom,montant,pot ->
+                    add_to_pay(nom, montant, pot),
+                    facture.concerned,
+                    add_payed(facture.emeteur, facture.montant, pot)
+            )
         Option.switch(
             group ->
                 List.fold(
-                    facture,pot ->
-                        Map.fold(
-                            nom,montant,pot ->
-                                Map.replace_or_add(nom, (last_montant -> Option.switch(v -> v - montant, 0.0-montant, last_montant)), pot)
-                            ,
-                            facture.concerned,
-                            Map.replace_or_add(facture.emeteur, (last_montant -> Option.switch(v -> v + facture.montant, facture.montant, last_montant)), pot)
-                        ),
+                    facture,pot -> add_facture(facture, pot),
                     group.factures,
                     Map.empty
                 )
@@ -35,7 +42,7 @@ Group_View_Group = {{
         )
     
     @client
-    xhtml_factures_list(ref : Group.ref) : xhtml =
+    table_factures(ref : Group.ref) : TableBuilder.t(Facture.t) =
         columns = [
             TableBuilder.mk_column(
                 <>Transmitter</>,
@@ -64,30 +71,35 @@ Group_View_Group = {{
         ]
         spec = TableBuilder.mk_spec(columns, get_all_factures(ref))
         table = TableBuilder.make(spec)
-        table.xhtml
+        table
     
-    add_user(ref)() =
+    add_user(ref : Group.ref)() =
         notice = match Group_Data.add_user(ref,Dom.get_value(#new_user)) with
-        | {~success} -> success
+        | {~success} -> do show_pot_commun(ref) success
         | {~failure} -> failure
         end
         Dom.transform([#notice_add <- notice])
     
+    add_facture(table : TableBuilder.t(Facture.t))(facture : Facture.t) : void =
+        TableBuilder.add(table.channel, facture)
+    
+    
     html(ref : Group.ref) : xhtml =
-        xhtml() = (<>
-        <h1>Groupe {ref}</h1>
-        <div><a href="/user/compte">My account</a></div>
-        {List.fold(v,acc -> acc^"{v} ", Group_Data.get_users(ref), "")}
-        <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun(ref), <></>)}</ul>
-        <h3>Add an expediture</h3>
-        {NewFactureForm.show(ref)}
-        <h3>Add somebody in the group</h3>
-        <div id=#notice_add></div>
-        <input id=#new_user/>
-        <button onclick={_->add_user(ref)()}>Add</button>
-        <h3>Accounts</h3>
-        {xhtml_factures_list(ref)}
-        </>)
+        xhtml() = 
+            table = table_factures(ref)
+            (<>
+            <h1>Groupe {ref}</h1>
+            <div><a href="/user/compte">My account</a></div>
+            <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
+            <h3>Add an expediture</h3>
+            {NewFactureForm.show(ref, add_facture(table))}
+            <h3>Add somebody in the group</h3>
+            <div id=#notice_add></div>
+            <input id=#new_user/>
+            <button onclick={_->add_user(ref)()}>Add</button>
+            <h3>Accounts</h3>
+            {table.xhtml}
+            </>)
         
         if Group_Data.can_view(ref, User.current_user_ref()) then
             <div id=#content onready={_->Dom.transform([#content <- xhtml()])}>Groupe {ref}</div>

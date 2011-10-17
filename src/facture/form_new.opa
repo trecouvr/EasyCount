@@ -6,8 +6,8 @@
 
 NewFactureForm = {{
     
-    montant = WFormBuilder.mk_field("Montant de la dépense:", WFormBuilder.text_field)
-    repartition = WFormBuilder.mk_field("Répartition:", WFormBuilder.text_field)
+    montant = WFormBuilder.mk_field("Amount:", WFormBuilder.text_field)
+    repartition = WFormBuilder.mk_field("Distribution:", WFormBuilder.text_field)
 
     create_field(field) =
         WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
@@ -45,7 +45,7 @@ NewFactureForm = {{
         tot_parts = List.fold(v,acc -> acc+v.nb_parts, repartition, 0.0)
         Map.From.assoc_list(List.map(v -> (v.nom, montant * v.nb_parts / tot_parts), repartition))
     
-    process(ref : Group.ref)(_) : void =
+    process(ref : Group.ref, edit : (Facture.t -> void))(_) : void =
     (
         montant = match WFormBuilder.get_field_value(montant) with
         | {~value} -> value
@@ -67,7 +67,7 @@ NewFactureForm = {{
                                 emeteur=User.current_user_ref() 
                                 concerned=do_repartition(montant, repartition)
                             }) with
-                        | {~success} -> success
+                        | {~success} -> do edit(success) "Expediture added"
                         | {~failure} -> failure
                         end,
                     "erreur de formatage de la repartition",
@@ -82,7 +82,7 @@ NewFactureForm = {{
     )
         
 
-    show(ref : Group.ref) : xhtml =
+    show(ref : Group.ref, edit : (Facture.t -> void)) : xhtml =
     (
         fields = <>
             {create_field(montant)}
@@ -90,7 +90,7 @@ NewFactureForm = {{
             <input type="submit" value="Ajouter" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("ajouter", {Basic}, fields, process(ref))
+        xhtml_form = WFormBuilder.form_html("ajouter", {Basic}, fields, process(ref,edit))
         
         <>
         <div id=#notice></div>
