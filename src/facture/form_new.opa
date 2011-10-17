@@ -106,6 +106,11 @@ NewFactureForm = {{
     show(ref : Group.ref, edit : (Facture.t -> void)) : xhtml =
     (
         fields = <>
+            <p>For the distribution you have to format your string, ex :<br/>
+            "marco polo" means marco and polo participates with equal part.<br/>
+            "marco 2 polo 1" means marco must pay 2 parts and polo 1 parts.
+            You can put as many spaces as you want.
+            </p>
             {create_field(montant)}
             {create_field(repartition)}
             <input type="submit" value="Add" />
