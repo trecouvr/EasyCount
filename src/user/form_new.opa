@@ -28,7 +28,7 @@ NewUserForm = {{
             "Passwords doesn't match"
         else
             match User_Data.add(name, pass) with
-            | {~success} -> success
+            | {~success} -> do Client.goto("/user/login") success
             | {~failure} -> failure
             end
         
@@ -48,6 +48,7 @@ NewUserForm = {{
         
         <>
         <div id=#notice></div>
-        {xhtml_form}
+        <div>{xhtml_form}</div>
+        <div><a href="/user/login">Login</a></div>
         </>
 }}

@@ -11,14 +11,14 @@ NewGroupForm = {{
     create_field(field) =
         WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
     
-    process(_) : void =
+    process(edit : (Group.t->void))(_) : void =
         name = match WFormBuilder.get_field_value(name) with
         | {~value} -> value
         | _ -> ""
         end
         notice = 
             match Group_Data.add(name) with
-            | {~success} -> success
+            | {~success} -> do edit(success) "Group added"
             | {~failure} -> failure
             end
         
@@ -26,13 +26,13 @@ NewGroupForm = {{
         void
         
 
-    show() : xhtml =
+    show(edit : (Group.t -> void)) : xhtml =
         fields = <>
             {create_field(name)}
             <input type="submit" value="Add" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("Add", {Basic}, fields, process)
+        xhtml_form = WFormBuilder.form_html("Add", {Basic}, fields, process(edit))
         
         <>
         <div id=#notice></div>

@@ -20,15 +20,16 @@ Group_Data = {{
     can_view(ref : Group.ref, ref_user : User.ref) : bool =
         List.exists(_ == ref_user, /groups[ref]/users)
     
-    add(name : string) : outcome(string,string) =
+    add(name : string) : outcome(Group.t,string) =
         if Db.exists(@/groups[name]) then
             {failure = "Name already used"}
         else
             user_ref = User.current_user_ref()
-            do /groups[name] <- {empty with ~name users=[user_ref]}
+            new_group = {empty with ~name users=[user_ref]}
+            do /groups[name] <- new_group
             groups = /users[user_ref]/groups
             do /users[user_ref]/groups <- List.add(name,groups)
-            {success = "Group added"}
+            {success = new_group}
     
     add_facture(ref : Group.ref, facture : Facture.t) : outcome(string,string) =
         users_ingroup = /groups[ref]/users
