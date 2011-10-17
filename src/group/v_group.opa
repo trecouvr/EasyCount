@@ -1,7 +1,7 @@
 
 
 
-
+import easycount.chart
 
 Group_View_Group = {{
     
@@ -24,7 +24,14 @@ Group_View_Group = {{
             if Map.size(pot_commun) < 2 then
                 <div>Advice : You are alone in this group, you should invite somebody.</div>
             else
+                names = Map.To.key_list(pot_commun)
+                datas = Map.To.val_list(pot_commun)
+                colors = []
+                chart = Chart.xhtml({Chart.default with ~datas ~colors ~names})
+                <>
+                {chart}
                 <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun, <></>)}</ul>
+                </>
         Dom.transform([#pot_commun <- xhtml_pot_commun])
     
     /**
@@ -121,6 +128,7 @@ Group_View_Group = {{
         do TableBuilder.add(table.channel, facture)
         do show_pot_commun(ref)
         void
+    
     
     /**
     View of group.
