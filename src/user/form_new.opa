@@ -25,7 +25,7 @@ NewUserForm = {{
         end
         notice = 
         if pass != pass2 then
-            "Les mots de passe sont différents"
+            "Passwords doesn't match"
         else
             match User_Data.add(name, pass) with
             | {~success} -> success
@@ -44,7 +44,7 @@ NewUserForm = {{
             <input type="submit" value="Register" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("register", {Basic}, fields, process)
+        xhtml_form = WFormBuilder.form_html("Register", {Basic}, fields, process)
         
         <>
         <div id=#notice></div>

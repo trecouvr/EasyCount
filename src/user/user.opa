@@ -14,11 +14,11 @@ User = {{
             u ->
                 if u.password == password then
                     do UserContext.change(_s -> {connect=name}, state)
-                    {success = "Connection établie"}
+                    {success = "Connection established"}
                 else
-                    {failure = "Mauvais mot de passe"}
+                    {failure = "Wrong password"}
             ,
-            {failure = "L'utilisateur n'existe pas"},
+            {failure = "User doesn't exist"},
             User_Data.get(name)
         )
     )

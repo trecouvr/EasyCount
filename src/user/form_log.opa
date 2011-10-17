@@ -1,5 +1,5 @@
 
-
+import stdlib.web.client
 
 LoginUserForm = {{
     username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
@@ -19,7 +19,7 @@ LoginUserForm = {{
         end
         notice = 
             match User.login(name, pass) with
-            | {~success} -> success
+            | {~success} -> do Client.goto("/user/compte") success
             | {~failure} -> failure
             end
         
@@ -34,10 +34,11 @@ LoginUserForm = {{
             <input type="submit" value="Login" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("login", {Basic}, fields, process)
+        xhtml_form = WFormBuilder.form_html("Login", {Basic}, fields, process)
         
         <>
         <div id=#notice></div>
-        {xhtml_form}
+        <div>{xhtml_form}</div>
+        <div><a href="/user/new">Create an account</a></div>
         </>
 }}

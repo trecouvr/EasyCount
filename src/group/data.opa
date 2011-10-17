@@ -19,31 +19,31 @@ Group_Data = {{
     
     add(name : string) : outcome(string,string) =
         if Db.exists(@/groups[name]) then
-            {failure = "Le nom de groupe est déjà utilisé"}
+            {failure = "Name already used"}
         else
             user_ref = User.current_user_ref()
             do /groups[name] <- {empty with ~name users=[user_ref]}
-            groups = List.add(name,/users[name]/groups)
-            do /users[user_ref]/groups <- groups
-            {success = "Groupe créé"}
+            groups = /users[user_ref]/groups
+            do /users[user_ref]/groups <- List.add(name,groups)
+            {success = "Group added"}
     
     add_facture(ref : Group.ref, facture : Facture.t) : outcome(string,string) =
         users_ingroup = /groups[ref]/users
         if List.exists(nom -> not(List.exists(_ == nom, users_ingroup)), Map.To.key_list(facture.concerned)) then
-            {failure = "un nom a été mal orthographié ou n'est pas dans ce groupe"}
+            {failure = "a user isn't in the group or has been missplelled"}
         else
             l = /groups[ref]/factures
             do /groups[ref]/factures <- List.add(facture, l)
-            {success = "dépense ajoutée"}
+            {success = "expediture added"}
     
     add_user(ref : Group.ref, new_user : User.ref) : outcome(string,string) =
         Option.switch(
             _ ->
                 l = /groups[ref]/users
                 do /groups[ref]/users <- List.add_uniq(String.ordering, new_user, l)
-                {success = "utilisateur ajouté"}
+                {success = "user added"}
             ,
-            {failure = "Cet utilisateur n'existe pas dans la base de données"},
+            {failure = "This user isn't in the database, he should register before"},
             User_Data.get(new_user)
         )
 }}

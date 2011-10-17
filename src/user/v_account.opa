@@ -31,12 +31,11 @@ User_View_Account = {{
     
     html() : xhtml =
         xhtml() = (<>
-        <h1>Mon Compte</h1>
+        <h1>My Account</h1>
         <p>Bievenue {User.current_user_ref()}.</p>
-        <div>
-            <h3>Créer un groupe</h3>
-            {NewGroupForm.show()}
-        </div>
+        <h3>Create a new group</h3>
+        {NewGroupForm.show()}
+        <h3>My groups</h3>
         {xhtml_groups_list()}
         </>)
         

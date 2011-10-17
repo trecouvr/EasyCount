@@ -38,13 +38,13 @@ Group_View_Group = {{
     xhtml_factures_list(ref : Group.ref) : xhtml =
         columns = [
             TableBuilder.mk_column(
-                <>Emeteur</>,
+                <>Transmitter</>,
                 r,_c -> <>{r.emeteur}</>,
                 some(r1, r2 -> String.ordering(r1.emeteur, r2.emeteur)),
                 none
             ),
             TableBuilder.mk_column(
-                <>Montant</>,
+                <>Amount</>,
                 r,_c -> <>{r.montant}</>,
                 some(r1, r2 -> Float.ordering(r1.montant, r2.montant)),
                 none
@@ -56,7 +56,7 @@ Group_View_Group = {{
                 none
             ),
             TableBuilder.mk_column(
-                <>Répartition</>,
+                <>Distribution</>,
                 r,_c -> <ul>{Map.fold(k,v,a -> <>{a}<li>{k} : {v}</li></>, r.concerned, <></>)}</ul>,
                 none,
                 none
@@ -76,15 +76,16 @@ Group_View_Group = {{
     html(ref : Group.ref) : xhtml =
         xhtml() = (<>
         <h1>Groupe {ref}</h1>
+        <div><a href="/user/compte">My account</a></div>
         {List.fold(v,acc -> acc^"{v} ", Group_Data.get_users(ref), "")}
         <ul>{Map.fold(nom,montant,acc -> <>{acc}<li>{nom} : {montant}</li></>, pot_commun(ref), <></>)}</ul>
-        <h3>Ajouter une dépense</h3>
+        <h3>Add an expediture</h3>
         {NewFactureForm.show(ref)}
-        <h3>Ajouter quelqu'un dans le groupe</h3>
+        <h3>Add somebody in the group</h3>
         <div id=#notice_add></div>
         <input id=#new_user/>
-        <button onclick={_->add_user(ref)()}>Ajouter</button>
-        <h3>Liste des dépenses</h3>
+        <button onclick={_->add_user(ref)()}>Add</button>
+        <h3>Accounts</h3>
         {xhtml_factures_list(ref)}
         </>)
         
