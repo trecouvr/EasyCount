@@ -1,0 +1,11 @@
+*.opp
+*.opx
+*.exe
+_build
+_build_o
+db*
+*.log
+*.api
+*.api-txt
+*.broken
+_tracks
