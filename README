@@ -6,7 +6,7 @@ EasyCount
 BUILD
 ===================
 Opa compiler (c) MLstate -- version S3.5 -- build 737
-$ make
+$ make all
 
 ===================
 LAUNCH
