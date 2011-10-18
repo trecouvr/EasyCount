@@ -17,10 +17,10 @@ all-release: $(FILES)
 
 
 
-run:	all
+run:
 	./$(EXE) --db-local db/db
 
-run-debug: all
+run-debug:
 	./$(EXE) --db-local db/db $(DEBUG)
 
 new-db:	all
