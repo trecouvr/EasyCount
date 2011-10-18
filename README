@@ -1,5 +1,20 @@
 EasyCount
 
+
+
+===================
+BUILD
+===================
+Opa compiler (c) MLstate -- version S3.5 -- build 737
+$ make
+
+===================
+LAUNCH
+===================
+$ make run
+
+
+
 Une petite application pour gérer les comptes.
 
 Il y a beaucoup d'optimisations possibles, d'améliorations d'érgonomie 
