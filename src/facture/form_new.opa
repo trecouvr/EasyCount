@@ -8,9 +8,10 @@ NewFactureForm = {{
     
     montant = WFormBuilder.mk_field("Amount:", WFormBuilder.text_field)
     repartition = WFormBuilder.mk_field("Distribution:", WFormBuilder.text_field)
+    form = WFormBuilder.mk_form()
 
     create_field(field) =
-        WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
+        WFormBuilder.render_field(form, field)
     
     /**
     Parse the formatted string to get distribution of the expediture.
@@ -63,14 +64,8 @@ NewFactureForm = {{
     */
     process(ref : Group.ref, edit : (Facture.t -> void))(_) : void =
     (
-        montant = match WFormBuilder.get_field_value(montant) with
-        | {~value} -> value
-        | _ -> ""
-        end
-        repartition = match WFormBuilder.get_field_value(repartition) with
-        | {~value} -> value
-        | _ -> ""
-        end
+        montant = Option.default("",WFormBuilder.get_field_value(montant))
+        repartition = Option.default("",WFormBuilder.get_field_value(repartition))
         notice = Option.switch(
             montant ->
                 Option.switch(
@@ -116,7 +111,7 @@ NewFactureForm = {{
             <input type="submit" value="Add" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("add", {Basic}, fields, process(ref,edit))
+        xhtml_form = WFormBuilder.render_form(form, fields, process(ref,edit))
         
         <>
         <div id=#notice></div>
