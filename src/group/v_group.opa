@@ -145,20 +145,27 @@ Group_View_Group = {{
     html(ref : Group.ref) : xhtml =
         xhtml() = 
             table = table_factures(ref)
-            (<>
-            <h1>Groupe {ref}</h1>
+            WB.Typography.header(1, none, <>Group</>)
+            <+>
             <div><a href="/user/compte">My account</a></div>
-            <h3>Common jar</h3>
+            <+>
+            WB.Typography.header(3, none, <>Common jar</>)
+            <+>
             <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
-            <h3>Add an expediture</h3>
-            {NewFactureForm.show(ref, table_add_facture(ref, table))}
-            <h3>Add somebody in the group</h3>
+            <+>
+            WB.Typography.header(3, none, <>Add an expediture</>)
+            <+>
+            NewFactureForm.show(ref, table_add_facture(ref, table))
+            <+>
+            WB.Typography.header(3, none, <>Add somebody in the group</>)
+            <+>
             <div id=#notice_add></div>
             <input id=#new_user/>
             <button onclick={_->add_user(ref,"new_user")}>Add</button>
-            <h3>Accounts</h3>
-            {table.xhtml}
-            </>)
+            <+>
+            WB.Typography.header(3, none, <>Accounts</>)
+            <+>
+            table.xhtml
         
         if Group_Data.can_view(ref, User.current_user_ref()) then
             <div id=#content onready={_->Dom.transform([#content <- xhtml()])}>Groupe {ref}</div>
