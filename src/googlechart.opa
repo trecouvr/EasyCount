@@ -37,7 +37,7 @@ Chart = {{
 	url = url^"&chdlp=b"
 	url = url^"&chtt=Common jar"
         do jlog(url)
-        <img src={url}/>
+        <img src={url} alt={spec.title} />
     
 
 
