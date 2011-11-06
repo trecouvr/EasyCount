@@ -4,19 +4,14 @@ import stdlib.web.client
 LoginUserForm = {{
     username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
     passwd     = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
+    form = WFormBuilder.mk_form()
 
     create_field(field) =
-        WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
+        WFormBuilder.render_field(form, field)
     
     process(_) : void =
-        name = match WFormBuilder.get_field_value(username) with
-        | {~value} -> value
-        | _ -> ""
-        end
-        pass = match WFormBuilder.get_field_value(passwd) with
-        | {~value} -> value
-        | _-> ""
-        end
+        name = Option.default("",WFormBuilder.get_field_value(username))
+        pass = Option.default("",WFormBuilder.get_field_value(passwd))
         notice = 
             match User.login(name, pass) with
             | {~success} -> do Client.goto("/user/compte") success
@@ -34,7 +29,7 @@ LoginUserForm = {{
             <input type="submit" value="Login" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("Login", {Basic}, fields, process)
+        xhtml_form = WFormBuilder.render_form(form, fields, process)
         
         <>
         <div id=#notice></div>

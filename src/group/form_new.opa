@@ -7,15 +7,13 @@
 NewGroupForm = {{
     
     name   = WFormBuilder.mk_field("Groupname:", WFormBuilder.text_field)
+    form = WFormBuilder.mk_form()
 
     create_field(field) =
-        WFormBuilder.field_html(field, WFormBuilder.default_field_builder, WFormBuilder.empty_style)
+        WFormBuilder.render_field(form, field)
     
     process(edit : (Group.t->void))(_) : void =
-        name = match WFormBuilder.get_field_value(name) with
-        | {~value} -> value
-        | _ -> ""
-        end
+        name = Option.default("",WFormBuilder.get_field_value(name))
         notice = 
             match Group_Data.add(name) with
             | {~success} -> do edit(success) "Group added"
@@ -32,7 +30,7 @@ NewGroupForm = {{
             <input type="submit" value="Add" />
         </>
         
-        xhtml_form = WFormBuilder.form_html("Add", {Basic}, fields, process(edit))
+        xhtml_form = WFormBuilder.render_form(form, fields, process(edit))
         
         <>
         <div id=#notice></div>
