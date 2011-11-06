@@ -5,6 +5,7 @@ import easycount.chart
 
 Group_View_Group = {{
     
+    id_notifications : string = "id_notifications"
     
     @publish
     get_all_factures(ref : Group.ref) =
@@ -119,11 +120,14 @@ Group_View_Group = {{
     @param id the id of input
     */
     add_user(ref : Group.ref, id : string) : void =
-        notice = match Group_Data.add_user(ref,Dom.get_value(#{id})) with
-        | {~success} -> do show_pot_commun(ref) success
-        | {~failure} -> failure
-        end
-        Dom.transform([#notice_add <- notice])
+        (title,t,content) = match Group_Data.add_user(ref,Dom.get_value(#{id})) with
+        | {~success} -> do show_pot_commun(ref) ("OK", {success}, success)
+        | {~failure} -> ("Error", {error}, failure)
+        do notice(WB.Message.make(
+            {alert={~title description=<>{content}</>} closable=true},
+            t
+        ))
+        void
     
     /**
     Add an expediture to the table
@@ -136,6 +140,11 @@ Group_View_Group = {{
         do show_pot_commun(ref)
         void
     
+    /**
+    Make a notification
+    */
+    notice(content : xhtml) : void =
+        Dom.transform([#{id_notifications} <- content])
     
     /**
     View of group.
@@ -159,9 +168,10 @@ Group_View_Group = {{
             <+>
             WB.Typography.header(3, none, <>Add somebody in the group</>)
             <+>
-            <div id=#notice_add></div>
+            <div id=#{id_notifications}></div>
             <input id=#new_user/>
-            <button onclick={_->add_user(ref,"new_user")}>Add</button>
+            <+>
+            WB.Button.make({button="Add" callback=(_->add_user(ref,"new_user"))}, [])
             <+>
             WB.Typography.header(3, none, <>Accounts</>)
             <+>
