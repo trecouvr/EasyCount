@@ -61,24 +61,27 @@ User_View_Account = {{
         xhtml() = 
         (
             table = table_groups()
-            (<>
-            <h1>My Account</h1>
+            WB.Typography.header(1, none, <>My Account</>)
+            <+>
             <p>Welcome {User.current_user_ref()}.</p>
-            <h3>Create a new group</h3>
-            <ul>
-                <li>Create a group</li>
-                <li>Invite people</li>
-                <li>Manage your acounts</li>
-            </ul>
-            {NewGroupForm.show(table_add_group(table))}
-            <h3>My groups</h3>
-            {table.xhtml}
-            </>)
+            <+>
+            WB.Typography.header(3, none, <>Create a new group</>)
+            <+>
+            WB.List.ordered([
+                <>Create a group</>,
+                <>Invite people</>,
+                <>Manage your acounts</>,
+            ])
+            <+>
+            NewGroupForm.show(table_add_group(table))
+            <+>
+            WB.Typography.header(3, none, <>Create a new group</>)
+            <+>
+            table.xhtml
         )
         
         <div id=#content onready={_->Dom.transform([#content <- xhtml()])}></div>
     )
-
 
 
 
