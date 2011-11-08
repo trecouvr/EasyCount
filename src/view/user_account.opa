@@ -81,7 +81,7 @@ User_View_Account = {{
             <+>
             NewGroupForm.show(table_add_group(table))
             <+>
-            WB.Typography.header(3, none, <>Create a new group</>)
+            WB.Typography.header(3, none, <>Groups you are member of</>)
             <+>
             table.xhtml
         )
