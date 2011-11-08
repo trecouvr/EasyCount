@@ -38,10 +38,7 @@ Group_View_Group = {{
                 random_color() = 
                     random_2() = 
                         s = Int.to_hex(Random.int(255))
-                        if String.length(s) == 1 then
-                            "0"^s
-                        else
-                            s
+                        if String.length(s) == 1 then "0"^s else s
                     Int.repeat(s-> s^random_2(), "", 3)
                 names = Map.To.key_list(pot_commun)
                 datas = Map.To.val_list(pot_commun)
