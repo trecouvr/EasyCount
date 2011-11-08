@@ -20,7 +20,7 @@ AddUserGroupForm = {{
     @param id the id of input
     */
     add_user(ref : Group.ref) : void =
-        notice = match Group_Data.add_user(ref,Dom.get_value(#{id_input})) with
+        notice = match Group_Data.add_user(ref,Dom.get_value(#{id_input^"_input"})) with
         | {~success} -> {success=<>{success}</>}
         | {~failure} -> {failure=<>{failure}</>}
         do Form_Tools.notice(notice)
@@ -42,7 +42,7 @@ AddUserGroupForm = {{
         )
     
     xhtml(ref : Group.ref) : xhtml =
-        onselect(item) = Dom.set_value(#{id_input}, item)
+        onselect(item) = Dom.set_value(#{id_input^"_input"}, item)
         <div id=#{Form_Tools.id_notifications}></div>
         <+>
         WCompletion.html({WCompletion.default_config with suggest = list_nom}, onselect, id_input, {input = "" display = <></> item = ""})
