@@ -174,7 +174,11 @@ Group_View_Group = {{
                 )
             WB.Typography.header(1, none, <>Group - {ref}</>)
             <+>
-            <div><a href="/user/compte">My account</a></div>
+            <div>
+            <a href="/user/compte">My account</a>
+            <br />
+            {User.btn_logout}
+            </div>
             <+>
             WB.Grid.row([
                 {span=8 offset=none content=add},

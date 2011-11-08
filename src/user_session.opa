@@ -1,6 +1,9 @@
 
 package easycount.user.session
 
+import stdlib.widgets.bootstrap
+import stdlib.web.client
+
 import easycount.data
 
 
@@ -10,6 +13,7 @@ type User.state =
 {connect : User.ref}
 
 User = {{
+    WB = WBootstrap
     
     state = UserContext.make({disconnect} : User.state)
     
@@ -26,6 +30,22 @@ User = {{
             {failure = "User doesn't exist"},
             User_Data.get(String.to_lower(name))
         )
+    )
+    
+    logout() : void =
+    (
+        UserContext.change(_s -> {disconnect}, state)
+    )
+    
+    /**
+    Button logout, after logout, the client go to the login page
+    */
+    btn_logout : xhtml =
+    (
+        callback(_e) = 
+            do logout()
+            Client.goto("/user/login")
+        WB.Button.make({button="Logout" ~callback}, [])
     )
     
     is_log() : bool =

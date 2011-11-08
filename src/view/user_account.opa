@@ -70,6 +70,7 @@ User_View_Account = {{
             WB.Typography.header(1, none, <>My Account</>)
             <+>
             <p>Welcome {User.current_user_ref()}.</p>
+            <p>{User.btn_logout}</p>
             <+>
             WB.Typography.header(3, none, <>Create a new group</>)
             <+>
