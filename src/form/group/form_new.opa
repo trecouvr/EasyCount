@@ -19,8 +19,11 @@ NewGroupForm = {{
         WFormBuilder.render_field(form, field)
     
     process(edit : (Group.t->void))(_) : void =
-        name = String.remove_accents(Option.default("",WFormBuilder.get_field_value(name)))
-        notice = 
+        check = parser | retour=([a-z0-9_-. ]*) -> "{retour}"
+        clean(s) = String.to_lower(String.remove_accents(s))
+        notice = match Parser.try_parse(check, clean(Option.default("",WFormBuilder.get_field_value(name)))) with
+        | {none} -> {failure=<>Some caracters are forbidden</>}
+        | {some=name} ->
             match Group_Data.add(name,User.current_user_ref()) with
             | {~success} -> do edit(success) {success=<>Group added</>}
             | {~failure} -> {failure = <>{failure}</>}
