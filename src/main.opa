@@ -24,6 +24,6 @@ urls : Parser.general_parser(http_request -> resource) =
 
 
 home : xhtml =
-    <p><a href="/user/login">Login</a></p>
+    <p style="text-align: center;"><br/><br/><br/><br/><a href="/user/login">Login</a></p>
 
 server = Server.make(Resource.add_auto_server(@static_resource_directory("res"),urls))

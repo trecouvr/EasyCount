@@ -6,6 +6,7 @@ import stdlib.widgets.formbuilder
 
 import easycount.data
 import easycount.user.session
+import easycount.form.tools
 
 NewFactureForm = {{
     
@@ -81,17 +82,17 @@ NewFactureForm = {{
                                 emeteur=User.current_user_ref() 
                                 concerned=do_repartition(montant, repartition)
                             }) with
-                        | {~success} -> do edit(success) "Expediture added"
-                        | {~failure} -> failure
+                        | {~success} -> do edit(success) {success=<>Expediture added</>}
+                        | {~failure} -> {failure=<>{failure}</>}
                         end,
-                    "erreur de formatage de la repartition",
+                    {failure=<>erreur de formatage de la repartition</>},
                     parse_repartition(repartition)
                 ),
-            "le montant n'est pas un float",
+            {failure=<>le montant n'est pas un float</>},
             Parser.float(montant)
         )
         
-        do Dom.transform([#notice <- <>{notice}</>])
+        do Form_Tools.notice(notice)
         void
     )
     
@@ -117,7 +118,7 @@ NewFactureForm = {{
         xhtml_form = WFormBuilder.render_form(form, fields, process(ref,edit))
         
         <>
-        <div id=#notice></div>
+        <div id=#{Form_Tools.id_notifications}></div>
         {xhtml_form}
         </>
     )

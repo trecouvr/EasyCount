@@ -2,10 +2,12 @@
 
 package easycount.user.form
 
-
 import stdlib.widgets.formbuilder
 
+import easycount.form.tools
+
 NewUserForm = {{
+    
     username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
     passwd1    = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
     passwd2    = WFormBuilder.mk_field("Password again:", WFormBuilder.passwd_field)
@@ -20,14 +22,14 @@ NewUserForm = {{
         pass2 = Option.default("",WFormBuilder.get_field_value(passwd2))
         notice = 
         if pass != pass2 then
-            "Passwords doesn't match"
+            {failure=<>Passwords doesn't match</>}
         else
             match User_Data.add(name, pass) with
-            | {~success} -> do Client.goto("/user/login") success
-            | {~failure} -> failure
+            | {~success} -> do Client.goto("/user/login") {success=<>{success}</>}
+            | {~failure} -> {failure=<>{failure}</>}
             end
         
-        do Dom.transform([#notice <- <>{notice}</>])
+        do Form_Tools.notice(notice)
         void
         
 
@@ -42,7 +44,7 @@ NewUserForm = {{
         xhtml_form = WFormBuilder.render_form(form, fields, process)
         
         <>
-        <div id=#notice></div>
+        <div id=#{Form_Tools.id_notifications}></div>
         <div>{xhtml_form}</div>
         <div><a href="/user/login">Login</a></div>
         </>

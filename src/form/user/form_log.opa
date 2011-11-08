@@ -22,11 +22,11 @@ LoginUserForm = {{
         pass = Option.default("",WFormBuilder.get_field_value(passwd))
         notice = 
             match User.login(name, pass) with
-            | {~success} -> do Client.goto("/user/compte") success
-            | {~failure} -> failure
+            | {~success} -> do Client.goto("/user/compte") {success=<>{success}</>}
+            | {~failure} -> {failure=<>{failure}</>}
             end
         
-        do Dom.transform([#notice <- <>{notice}</>])
+        do Form_Tools.notice(notice)
         void
         
 
@@ -40,7 +40,7 @@ LoginUserForm = {{
         xhtml_form = WFormBuilder.render_form(form, fields, process)
         
         <>
-        <div id=#notice></div>
+        <div id=#{Form_Tools.id_notifications}></div>
         <div>{xhtml_form}</div>
         <div><a href="/user/new">Create an account</a></div>
         </>

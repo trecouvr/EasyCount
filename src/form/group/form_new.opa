@@ -6,6 +6,7 @@ import stdlib.widgets.formbuilder
 
 import easycount.data
 import easycount.user.session
+import easycount.form.tools
 
 
 
@@ -21,11 +22,11 @@ NewGroupForm = {{
         name = Option.default("",WFormBuilder.get_field_value(name))
         notice = 
             match Group_Data.add(name,User.current_user_ref()) with
-            | {~success} -> do edit(success) "Group added"
-            | {~failure} -> failure
+            | {~success} -> do edit(success) {success=<>Group added</>}
+            | {~failure} -> {failure = <>{failure}</>}
             end
         
-        do Dom.transform([#notice <- <>{notice}</>])
+        do Form_Tools.notice(notice)
         void
         
 
@@ -38,7 +39,7 @@ NewGroupForm = {{
         xhtml_form = WFormBuilder.render_form(form, fields, process(edit))
         
         <>
-        <div id=#notice></div>
+        <div id=#{Form_Tools.id_notifications}></div>
         {xhtml_form}
         </>
 }}
