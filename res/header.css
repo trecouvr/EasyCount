@@ -1,0 +1,25 @@
+
+
+
+#logo {
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+#title {
+    margin: 0;
+    padding: 0;
+    padding-left: 150px;
+    padding-top: 30px;
+}
+
+#subtitle {
+    margin: 0;
+    padding: 0;
+    padding-left: 150px;
+}
+
+#login_button {
+    clear: both;
+}
