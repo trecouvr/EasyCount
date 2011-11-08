@@ -37,7 +37,7 @@ User_View_Account = {{
         columns = [
             TableBuilder.mk_column(
                 <>Groupe</>,
-                r,_c -> <a href="/group/view/{r}">{r}</a>,
+                r,_c -> <a href="/group/view/{String.replace(" ","%20",r)}">{r}</a>,
                 some(r1, r2 -> String.ordering(r1, r2)),
                 none
             )

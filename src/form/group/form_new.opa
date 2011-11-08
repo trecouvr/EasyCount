@@ -19,7 +19,7 @@ NewGroupForm = {{
         WFormBuilder.render_field(form, field)
     
     process(edit : (Group.t->void))(_) : void =
-        name = Option.default("",WFormBuilder.get_field_value(name))
+        name = String.remove_accents(Option.default("",WFormBuilder.get_field_value(name)))
         notice = 
             match Group_Data.add(name,User.current_user_ref()) with
             | {~success} -> do edit(success) {success=<>Group added</>}
