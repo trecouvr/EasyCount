@@ -1,6 +1,11 @@
 
 
+package easycount.group.form
 
+import stdlib.widgets.formbuilder
+
+import easycount.data
+import easycount.user.session
 
 
 
@@ -15,7 +20,7 @@ NewGroupForm = {{
     process(edit : (Group.t->void))(_) : void =
         name = Option.default("",WFormBuilder.get_field_value(name))
         notice = 
-            match Group_Data.add(name) with
+            match Group_Data.add(name,User.current_user_ref()) with
             | {~success} -> do edit(success) "Group added"
             | {~failure} -> failure
             end

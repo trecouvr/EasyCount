@@ -1,10 +1,16 @@
 
+package easycount.user.view
+
+import stdlib.widgets.bootstrap
 
 import nostdlib.tablebuilder
+import easycount.group.form
+import easycount.data
+import easycount.user.session
 
 
 User_View_Account = {{
-    
+    WB = WBootstrap
     
     /**
     Get all groups the current user is in.

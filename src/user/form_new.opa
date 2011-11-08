@@ -1,5 +1,8 @@
 
 
+package easycount.user.form
+
+
 import stdlib.widgets.formbuilder
 
 NewUserForm = {{

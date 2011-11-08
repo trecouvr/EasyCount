@@ -1,8 +1,11 @@
 
 
+package easycount.facture.form
 
+import stdlib.widgets.formbuilder
 
-
+import easycount.data
+import easycount.user.session
 
 NewFactureForm = {{
     

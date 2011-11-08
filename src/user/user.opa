@@ -1,4 +1,9 @@
 
+package easycount.user.session
+
+import easycount.data
+
+
 
 type User.state = 
 {disconnect} /

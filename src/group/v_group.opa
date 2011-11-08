@@ -1,9 +1,19 @@
 
 
+package easycount.group.view
 
+import stdlib.widgets.bootstrap
+
+import nostdlib.tablebuilder
 import easycount.chart
+import easycount.data
+import easycount.user.session
+import easycount.group.form
+import easycount.facture.form
+
 
 Group_View_Group = {{
+    WB = WBootstrap
     
     id_notifications : string = "id_notifications"
     

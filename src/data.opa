@@ -1,5 +1,7 @@
 
 
+package easycount.data
+
 import stdlib.core.date
 
 

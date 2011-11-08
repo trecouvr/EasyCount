@@ -1,5 +1,13 @@
 
+
+package easycount.user.form
+
 import stdlib.web.client
+import stdlib.widgets.formbuilder
+
+import easycount.data
+import easycount.user.session
+
 
 LoginUserForm = {{
     username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)

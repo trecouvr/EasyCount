@@ -4,6 +4,15 @@ import stdlib.themes.bootstrap
 import stdlib.widgets.bootstrap
 WB = WBootstrap
 
+
+import easycount.user.view
+import easycount.user.form
+import easycount.user.session
+import easycount.group.view
+import easycount.group.form
+
+
+
 page_onready(get_content : ->xhtml) : xhtml =
     id = Dom.fresh_id()
     <div id=#{id} onready={_->Dom.transform([#{id} <- get_content()])}></div>
