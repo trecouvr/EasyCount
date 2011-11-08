@@ -8,7 +8,7 @@ import easycount.form.tools
 
 NewUserForm = {{
     
-    username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
+    email      = WFormBuilder.mk_field("Email:", WFormBuilder.email_field(<>test</>))
     passwd1    = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
     passwd2    = WFormBuilder.mk_field("Password again:", WFormBuilder.passwd_field)
     form = WFormBuilder.mk_form()
@@ -17,14 +17,19 @@ NewUserForm = {{
         WFormBuilder.render_field(form ,field)
     
     process(_) : void =
-        name = Option.default("",WFormBuilder.get_field_value(username))
-        pass = Option.default("",WFormBuilder.get_field_value(passwd1))
+        email = Option.default({name=none address={local="" domain=""}},WFormBuilder.get_field_value(email))
+        email = email.address.local^"@"^email.address.domain
+        pass  = Option.default("",WFormBuilder.get_field_value(passwd1))
         pass2 = Option.default("",WFormBuilder.get_field_value(passwd2))
         notice = 
-        if pass != pass2 then
+        if email == "" then
+            {failure=<>Email is empty</>}
+        else if pass == "" then
+            {failure=<>Password is empty</>}
+        else if pass != pass2 then
             {failure=<>Passwords doesn't match</>}
         else
-            match User_Data.add(name, pass) with
+            match User_Data.add(String.to_lower(email), pass) with
             | {~success} -> do Client.goto("/user/login") {success=<>{success}</>}
             | {~failure} -> {failure=<>{failure}</>}
             end
@@ -35,7 +40,7 @@ NewUserForm = {{
 
     show() : xhtml =
         fields = <>
-            {create_field(username)}
+            {create_field(email)}
             {create_field(passwd1)}
             {create_field(passwd2)}
             <input type="submit" value="Register" />

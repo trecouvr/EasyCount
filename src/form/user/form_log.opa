@@ -10,7 +10,7 @@ import easycount.user.session
 
 
 LoginUserForm = {{
-    username   = WFormBuilder.mk_field("Username:", WFormBuilder.text_field)
+    email   = WFormBuilder.mk_field("Email:", WFormBuilder.text_field)
     passwd     = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
     form = WFormBuilder.mk_form()
 
@@ -18,7 +18,7 @@ LoginUserForm = {{
         WFormBuilder.render_field(form, field)
     
     process(_) : void =
-        name = Option.default("",WFormBuilder.get_field_value(username))
+        name = Option.default("",WFormBuilder.get_field_value(email))
         pass = Option.default("",WFormBuilder.get_field_value(passwd))
         notice = 
             match User.login(name, pass) with
@@ -32,7 +32,7 @@ LoginUserForm = {{
 
     show() : xhtml =
         fields = <>
-            {create_field(username)}
+            {create_field(email)}
             {create_field(passwd)}
             <input type="submit" value="Login" />
         </>

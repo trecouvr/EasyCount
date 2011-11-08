@@ -24,7 +24,7 @@ User = {{
                     {failure = "Wrong password"}
             ,
             {failure = "User doesn't exist"},
-            User_Data.get(name)
+            User_Data.get(String.to_lower(name))
         )
     )
     
