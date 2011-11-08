@@ -164,24 +164,37 @@ Group_View_Group = {{
     html(ref : Group.ref) : xhtml =
         xhtml() = 
             table = table_factures(ref)
-            WB.Typography.header(1, none, <>Group</>)
+            common_jar = 
+                WB.Div.well(
+                    WB.Typography.header(4, none, <>Common jar</>)
+                    <+>
+                    <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
+                )
+            add_facture =
+                    WB.Typography.header(4, none, <>Add an expediture</>)
+                    <+>
+                    NewFactureForm.show(ref, table_add_facture(ref, table))
+            add_somebody =
+                    WB.Typography.header(4, none, <>Add somebody in the group</>)
+                    <+>
+                    <div id=#{id_notifications}></div>
+                    <input id=#new_user/>
+                    <+>
+                    WB.Button.make({button="Add" callback=(_->add_user(ref,"new_user"))}, [])
+            add =
+                WB.Div.well(
+                    add_facture
+                    <+>
+                    add_somebody
+                )
+            WB.Typography.header(1, none, <>Group - {ref}</>)
             <+>
             <div><a href="/user/compte">My account</a></div>
             <+>
-            WB.Typography.header(3, none, <>Common jar</>)
-            <+>
-            <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
-            <+>
-            WB.Typography.header(3, none, <>Add an expediture</>)
-            <+>
-            NewFactureForm.show(ref, table_add_facture(ref, table))
-            <+>
-            WB.Typography.header(3, none, <>Add somebody in the group</>)
-            <+>
-            <div id=#{id_notifications}></div>
-            <input id=#new_user/>
-            <+>
-            WB.Button.make({button="Add" callback=(_->add_user(ref,"new_user"))}, [])
+            WB.Grid.row([
+                {span=8 offset=none content=add},
+                {span=8 offset=none content=common_jar}
+            ])
             <+>
             WB.Typography.header(3, none, <>Accounts</>)
             <+>
