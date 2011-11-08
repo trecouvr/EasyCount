@@ -8,7 +8,7 @@ import easycount.form.tools
 
 NewUserForm = {{
     
-    email      = WFormBuilder.mk_field("Email:", WFormBuilder.email_field(<>test</>))
+    email      = WFormBuilder.mk_field("Email:", WFormBuilder.email_field(<>John@deuf.com</>))
     passwd1    = WFormBuilder.mk_field("Password:", WFormBuilder.passwd_field)
     passwd2    = WFormBuilder.mk_field("Password again:", WFormBuilder.passwd_field)
     form = WFormBuilder.mk_form()
