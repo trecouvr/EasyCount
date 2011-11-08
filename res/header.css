@@ -20,6 +20,8 @@
     padding-left: 150px;
 }
 
-#login_button {
+#end_header {
+    margin: 0;
+    padding: 0;
     clear: both;
 }

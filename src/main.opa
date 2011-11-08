@@ -1,41 +1,29 @@
 
 
-import stdlib.themes.bootstrap
-import stdlib.widgets.bootstrap
-WB = WBootstrap
 
-
+import easycount.template
 import easycount.user.view
 import easycount.user.form
 import easycount.user.session
 import easycount.group.view
 import easycount.group.form
-import easycount.view.header
 
 
 
-page_onready(get_content : ->xhtml) : xhtml =
-    id = Dom.fresh_id()
-    <div id=#{id} onready={_->Dom.transform([#{id} <- get_content()])}></div>
-
-template(content : xhtml, style : list(string)) =
-    Resource.styled_page("EasyCount", style, WB.Layout.fixed(content))
 
 urls : Parser.general_parser(http_request -> resource) =
     parser
-    | "/" -> _req -> template(home, ["/res/header.css"])
+    | "/" -> _req -> Template.page(home)
     | "/favicon.gif" ->  _req -> @static_resource("res/logo-40.png")
     | "/logo-128.png" ->  _req -> @static_resource("res/logo-128.png")
-    | "/group/view/" name=(.*) -> _req -> template(Group_View_Group.html("{name}"), [])
-    | "/user/new" -> _req -> template(page_onready(->NewUserForm.show()), [])
-    | "/user/login" -> _req -> template(page_onready(->LoginUserForm.show()), [])
-    | "/user/compte" -> _req -> template(User_View_Account.html(), [])
+    | "/group/view/" name=(.*) -> _req -> Template.page(Group_View_Group.html("{name}"))
+    | "/user/new" -> _req -> Template.page_onready(->NewUserForm.show())
+    | "/user/login" -> _req -> Template.page_onready(->LoginUserForm.show())
+    | "/user/compte" -> _req -> Template.page(User_View_Account.html())
     end
 
 
 home : xhtml =
-    View_Header.xhtml
-    <+>
-    <p id=#login_button ><a href="/user/login">Login</a></p>
+    <p><a href="/user/login">Login</a></p>
 
 server = Server.make(Resource.add_auto_server(@static_resource_directory("res"),urls))
