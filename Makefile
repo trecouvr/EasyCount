@@ -2,8 +2,13 @@
 # @author Matthieu Guffroy
 
 OPA=opa
+
 OPX_DIR=_build_o
-OPT=--opx-dir $(OPX_DIR)
+DB_DIR=db
+#TRANSLATIONS_DIR=translations
+
+OPT-DB=--db-local $(DB_DIR)/db --db-force-upgrade
+OPT=--opx-dir $(OPX_DIR) #--i18n-dir $(TRANSLATIONS_DIR)
 OPT-RELEASE=$(OPT) --compile-release
 DEBUG=--debug-editable-css --verbose 100
 FILES=$(shell find src -name '*.opa')
@@ -15,19 +20,15 @@ all: $(FILES)
 all-release: $(FILES)
 	$(OPA) $^ -o main.exe $(OPT-RELEASE)
 
-
+translation: $(FILES)
+	$(OPA) --i18n-template-opa $^ --i18n-dir $(TRANSLATIONS_DIR)
 
 run:
-	./$(EXE) --db-local db/db
+	./$(EXE) $(OPT-DB)
 
 run-debug:
-	./$(EXE) --db-local db/db $(DEBUG)
+	./$(EXE) $(OPT-DB) $(DEBUG)
 
-new-db:	all
-	./$(EXE) --db-local db/db --db-force-upgrade
-
-new-db-debug: all
-	./$(EXE) --db-local db/db --db-force-upgrade $(DEBUG)
 
 clean-db:
 	rm -rf db/*
