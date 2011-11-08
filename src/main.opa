@@ -26,8 +26,6 @@ urls : Parser.general_parser(http_request -> resource) =
     | "/" -> _req -> template(home, ["/res/header.css"])
     | "/favicon.gif" ->  _req -> @static_resource("res/logo-40.png")
     | "/logo-128.png" ->  _req -> @static_resource("res/logo-128.png")
-    | "/logo-256.png" ->  _req -> @static_resource("res/logo-256.png")
-    | "/logo-512.png" ->  _req -> @static_resource("res/logo-512.png")
     | "/group/view/" name=(.*) -> _req -> template(Group_View_Group.html("{name}"), [])
     | "/user/new" -> _req -> template(page_onready(->NewUserForm.show()), [])
     | "/user/login" -> _req -> template(page_onready(->LoginUserForm.show()), [])
