@@ -18,7 +18,7 @@ NewFactureForm = {{
         WFormBuilder.render_field(form, field)
     
     /**
-    Parse the formatted string to get distribution of the expediture.
+    Parse the formatted string to get distribution of the spending.
     Get users concerned and their parts.
     @param s the formatted-string
     @return an option, if succeed a list of {nom nb_parts}
@@ -82,7 +82,7 @@ NewFactureForm = {{
                                 emeteur=User.current_user_ref() 
                                 concerned=do_repartition(montant, repartition)
                             }) with
-                        | {~success} -> do edit(success) {success=<>Expediture added</>}
+                        | {~success} -> do edit(success) {success=<>Spending added</>}
                         | {~failure} -> {failure=<>{failure}</>}
                         end,
                     {failure=<>erreur de formatage de la repartition</>},
@@ -99,7 +99,7 @@ NewFactureForm = {{
     /**
     Get form.
     @param ref the reference of current group
-    @param edit a function to update a table of expeditures
+    @param edit a function to update a table of spendings
     @return xhtml
     */
     show(ref : Group.ref, edit : (Facture.t -> void)) : xhtml =

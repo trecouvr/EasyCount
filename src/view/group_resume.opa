@@ -90,7 +90,7 @@ Group_View_Group = {{
         )
     
     /**
-    Create a TableBuilder for expeditures.
+    Create a TableBuilder for spendings.
     @param ref the ref of current group
     @return the table
     */
@@ -128,10 +128,10 @@ Group_View_Group = {{
     
     
     /**
-    Add an expediture to the table
+    Add a spending to the table
     @param ref the reference of current group
     @param table the table
-    @param facture the expediture
+    @param facture the spending
     */
     table_add_facture(ref : Group.ref, table : TableBuilder.t(Facture.t))(facture : Facture.t) : void =
         do TableBuilder.add(table.channel, facture)
@@ -159,7 +159,7 @@ Group_View_Group = {{
                     <div id=#pot_commun onready={_->show_pot_commun(ref)}></div>
                 )
             add_facture =
-                    WB.Typography.header(4, none, <>Add an expediture</>)
+                    WB.Typography.header(4, none, <>Add a spending</>)
                     <+>
                     NewFactureForm.show(ref, table_add_facture(ref, table))
             add_somebody =
@@ -182,7 +182,7 @@ Group_View_Group = {{
             ])
             <+>
             WB.Div.well(
-                WB.Typography.header(3, none, <>Accounts</>)
+                WB.Typography.header(3, none, <>Spendings</>)
                 <+>
                 table.xhtml
             )
