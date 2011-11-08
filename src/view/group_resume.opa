@@ -35,9 +35,14 @@ Group_View_Group = {{
             if Map.size(pot_commun) < 2 then
                 <div>Advice : You are alone in this group, you should invite somebody.</div>
             else
-                random_color() =
-                    s = Int.to_hex(Random.int(255))^Int.to_hex(Random.int(255))^Int.to_hex(Random.int(255))
-                    Int.repeat(s -> s^"0", s, 6-String.length(s))
+                random_color() = 
+                    random_2() = 
+                        s = Int.to_hex(Random.int(255))
+                        if String.length(s) == 1 then
+                            "0"^s
+                        else
+                            s
+                    Int.repeat(s-> s^random_2(), "", 3)
                 names = Map.To.key_list(pot_commun)
                 datas = Map.To.val_list(pot_commun)
                 colors = Int.repeat(
