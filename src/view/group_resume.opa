@@ -124,20 +124,6 @@ Group_View_Group = {{
         table = TableBuilder.make(spec)
         table
     
-    /**
-    Add a user to the current group, using the value in the input field.
-    @param ref the reference of current group
-    @param id the id of input
-    */
-    add_user(ref : Group.ref, id : string) : void =
-        (title,t,content) = match Group_Data.add_user(ref,Dom.get_value(#{id})) with
-        | {~success} -> do show_pot_commun(ref) ("OK", {success}, success)
-        | {~failure} -> ("Error", {error}, failure)
-        do notice(WB.Message.make(
-            {alert={~title description=<>{content}</>} closable=true},
-            t
-        ))
-        void
     
     /**
     Add an expediture to the table
@@ -177,10 +163,7 @@ Group_View_Group = {{
             add_somebody =
                     WB.Typography.header(4, none, <>Add somebody in the group</>)
                     <+>
-                    <div id=#{id_notifications}></div>
-                    <input id=#new_user/>
-                    <+>
-                    WB.Button.make({button="Add" callback=(_->add_user(ref,"new_user"))}, [])
+                    AddUserGroupForm.xhtml(ref)
             add =
                 WB.Div.well(
                     add_facture
@@ -196,9 +179,11 @@ Group_View_Group = {{
                 {span=8 offset=none content=common_jar}
             ])
             <+>
-            WB.Typography.header(3, none, <>Accounts</>)
-            <+>
-            table.xhtml
+            WB.Div.well(
+                WB.Typography.header(3, none, <>Accounts</>)
+                <+>
+                table.xhtml
+            )
         
         if Group_Data.can_view(ref, User.current_user_ref()) then
             <div id=#content onready={_->Dom.transform([#content <- xhtml()])}>Groupe {ref}</div>

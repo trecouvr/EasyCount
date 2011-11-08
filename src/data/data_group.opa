@@ -49,7 +49,7 @@ Group_Data = {{
                 do /users[new_user]/groups <- List.add_uniq(String.ordering, ref,l)
                 {success = "user added"}
             ,
-            {failure = "This user isn't in the database, he should register before"},
+            {failure = "User '{new_user}' isn't in the database, he should register before"},
             User_Data.get(new_user)
         )
     

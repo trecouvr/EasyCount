@@ -13,10 +13,10 @@ User_Data = {{
     add(name : string, password : string) : outcome(string, string) =
     (
         if Db.exists(@/users[name]) then
-            {failure = "Name already used"}
+            {failure = "Name '{name}' already used"}
         else
             do /users[name] <- {~name ~password groups=[]}
-            {success = "User added"}
+            {success = "User '{name}' added"}
     )
     
     get(ref : User.ref) : option(User.t) =
