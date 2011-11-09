@@ -96,6 +96,15 @@ NewFactureForm = {{
     )
     
     /**
+    Select all group
+    */
+    select_all_group(users : list(User.ref)) : void =
+        List.iter(
+            user_ref -> Dom.set_value(#{id_implication(user_ref)}, "1"),
+            users
+        )
+    
+    /**
     Get form.
     @param ref the reference of current group
     @param edit a function to update a table of spendings
@@ -109,8 +118,9 @@ NewFactureForm = {{
         {field_montant}
         <br/>
         {List.fold(user_ref,acc -> <>{acc}{field_implication(user_ref)}</>, users, <></>)}
-        {WB.Button.make({button="Add" callback=process(ref, users, edit)}, [])}
         </form>
+        {WB.Button.make({button="All Group" callback=(_e->select_all_group(users))}, [])}
+        {WB.Button.make({button="Add" callback=process(ref, users, edit)}, [])}
         </>
     )
 }}
