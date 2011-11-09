@@ -27,7 +27,7 @@ NewFactureForm = {{
     (
         name_parser =
             parser
-            | " "* nom=Rule.alphanum_string " "* nb_parts=Rule.integer? " "* -> {~nom ~nb_parts}
+            | " "* nom=([-a-zA-Z0-9_.@]*) " "* nb_parts=Rule.integer? " "* -> {~nom ~nb_parts}
             end
         repartition_parser = 
             parser
@@ -59,7 +59,7 @@ NewFactureForm = {{
     */
     do_repartition(montant : float, repartition : list({ nb_parts: float; nom: string })) : map(User.ref, float) =
         tot_parts = List.fold(v,acc -> acc+v.nb_parts, repartition, 0.0)
-        Map.From.assoc_list(List.map(v -> (v.nom, montant * v.nb_parts / tot_parts), repartition))
+        Map.From.assoc_list(List.map(v -> (User_Data.string_to_ref(v.nom), montant * v.nb_parts / tot_parts), repartition))
     
     /**
     Compute the process fonction of the form.
@@ -79,7 +79,7 @@ NewFactureForm = {{
                             {
                                 date=Date.now() 
                                 ~montant 
-                                emeteur=User.current_user_ref() 
+                                emeteur=User.current_user_ref()
                                 concerned=do_repartition(montant, repartition)
                             }) with
                         | {~success} -> do edit(success) {success=<>Spending added</>}

@@ -18,7 +18,7 @@ LoginUserForm = {{
         WFormBuilder.render_field(form, field)
     
     process(_) : void =
-        name = Option.default("",WFormBuilder.get_field_value(email))
+        name = User_Data.string_to_ref(Option.default("",WFormBuilder.get_field_value(email)))
         pass = Option.default("",WFormBuilder.get_field_value(passwd))
         notice = 
             match User.login(name, pass) with

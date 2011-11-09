@@ -17,7 +17,7 @@ User = {{
     
     state = UserContext.make({disconnect} : User.state)
     
-    login(name : string, password : string) : outcome(string,string) = 
+    login(name : User.ref, password : string) : outcome(string,string) = 
     (
         Option.switch(
             u ->
@@ -28,7 +28,7 @@ User = {{
                     {failure = "Wrong password"}
             ,
             {failure = "User doesn't exist"},
-            User_Data.get(String.to_lower(name))
+            User_Data.get(name)
         )
     )
     
@@ -62,7 +62,7 @@ User = {{
             s ->
                 match s with
                 | {connect=ref} -> ref
-                | _ -> "anonymous"
+                | _ -> User_Data.ref_anonymous
                 end
             , state
         )

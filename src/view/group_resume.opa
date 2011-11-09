@@ -18,7 +18,7 @@ Group_View_Group = {{
     id_notifications : string = "id_notifications"
     
     @publish
-    get_all_factures(ref : Group.ref) =
+    get_all_factures(ref : Group.ref) : list(Facture.t) =
         Option.switch(
             group -> group.factures,
             [],
@@ -40,7 +40,7 @@ Group_View_Group = {{
                         s = Int.to_hex(Random.int(255))
                         if String.length(s) == 1 then "0"^s else s
                     Int.repeat(s-> s^random_2(), "", 3)
-                names = Map.To.key_list(pot_commun)
+                names = List.map(v -> "{v}", Map.To.key_list(pot_commun))
                 datas = Map.To.val_list(pot_commun)
                 colors = Int.repeat(
                     accu -> List.append([random_color()],accu),
@@ -100,7 +100,7 @@ Group_View_Group = {{
             TableBuilder.mk_column(
                 <>Transmitter</>,
                 r,_c -> <>{r.emeteur}</>,
-                some(r1, r2 -> String.ordering(r1.emeteur, r2.emeteur)),
+                some(r1, r2 -> User_Data.ordering(r1.emeteur, r2.emeteur)),
                 none
             ),
             TableBuilder.mk_column(

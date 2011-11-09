@@ -6,7 +6,7 @@ import stdlib.core.date
 
 
 
-type User.ref = string
+@abstract type User.ref = string
 type User.t = {
     name : string
     password : string

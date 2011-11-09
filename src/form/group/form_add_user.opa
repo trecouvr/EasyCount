@@ -20,7 +20,7 @@ AddUserGroupForm = {{
     @param id the id of input
     */
     add_user(ref : Group.ref) : void =
-        notice = match Group_Data.add_user(ref,Dom.get_value(#{id_input^"_input"})) with
+        notice = match Group_Data.add_user(ref,User_Data.string_to_ref(Dom.get_value(#{id_input^"_input"}))) with
         | {~success} -> {success=<>{success}</>}
         | {~failure} -> {failure=<>{failure}</>}
         do Form_Tools.notice(notice)
@@ -29,16 +29,13 @@ AddUserGroupForm = {{
     @publish
     list_nom(in) = 
         in = String.to_lower(in)
-        Db.stringmap_fold_range(
-            @/users,
-            (acc,ref ->
-                if String.has_prefix(in, ref) then
-                    List.add({input=in display=<>{ref}</> item=ref}, acc)
+        User_Data.fold((ref,_u,acc ->
+                if String.has_prefix(in, "{ref}") then
+                    List.add({input=in display=<>{ref}</> item="{ref}"}, acc)
                 else
                     acc
             ),
-            [],
-            "", none, (_->true)
+            []
         )
     
     xhtml(ref : Group.ref) : xhtml =
