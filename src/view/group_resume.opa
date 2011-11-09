@@ -152,6 +152,10 @@ Group_View_Group = {{
     html(ref : Group.ref) : xhtml =
         xhtml() = 
             table = table_factures(ref)
+            users = match Group_Data.get(ref) with
+            | {none} -> []
+            | {some=group} -> group.users
+            end
             common_jar = 
                 WB.Div.well(
                     WB.Typography.header(4, none, <>Common jar</>)
@@ -161,7 +165,7 @@ Group_View_Group = {{
             add_facture =
                     WB.Typography.header(4, none, <>Add a spending</>)
                     <+>
-                    NewFactureForm.show(ref, table_add_facture(ref, table))
+                    NewFactureForm.show(ref, users, table_add_facture(ref,table))
             add_somebody =
                     WB.Typography.header(4, none, <>Add somebody in the group</>)
                     <+>
